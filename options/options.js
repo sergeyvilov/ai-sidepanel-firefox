@@ -266,12 +266,21 @@ function setupShortcutRecording() {
   }
 }
 
+// Persist just the enabled flag for a single prompt
+async function saveEnabledState(promptIndex, enabled) {
+  const data = await browser.storage.sync.get("prompts");
+  const prompts = data.prompts || DEFAULT_PROMPTS;
+  prompts[promptIndex].enabled = enabled;
+  await browser.storage.sync.set({ prompts });
+}
+
 // Setup auto-save listeners
 function setupAutoSave() {
   for (let i = 1; i <= 5; i++) {
     const checkbox = document.getElementById(`prompt${i}-enabled`);
     checkbox.addEventListener("change", () => {
       updatePromptDisabledState(i);
+      saveEnabledState(i - 1, checkbox.checked);
     });
     document.getElementById(`prompt${i}-name`).addEventListener("input", autoSavePrompts);
     document.getElementById(`prompt${i}-text`).addEventListener("input", autoSavePrompts);
