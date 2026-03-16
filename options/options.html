@@ -8,13 +8,15 @@
 <body>
   <section>
     <p class="help-text">
-      This extension automatically sends pre-defined prompts with the highlighted text to an AI sidebar.
-      Configure up to 5 prompts that appear in the right-click menu or can be invoked through special shortcuts.
+      This extension automatically sends pre-defined prompts with the highlighted text to an AI sidebar. <br><br>
+      Configure up to 10 prompts that appear in the right-click menu or can be invoked through special shortcuts.<br>
       In your prompt, <code>%s</code> will be automatically substituted with the selected text,
       <code>%c</code> will be substituted with the snippet including N words before and N words after the selected text,
       <code>%title</code> will be substituted with the title of the current page,
       <code>%url</code> will be substituted with the url of the current page.
+      <br><br>
       <strong>Shortcuts</strong>: Click the shortcut field and press your desired key combination.
+      <br>
       <strong>ChatGPT/Claude/Gemini pages with the sidebar</strong>:
       1.&nbsp;If the sidebar is closed, the prompt is auto-typed into the page input.
       2.&nbsp;If the sidebar is opened, the prompt is sent to the sidebar.
@@ -132,6 +134,121 @@
           <div class="shortcut-row">
             <span class="shortcut-label">Shortcut:</span>
             <input type="text" id="prompt5-shortcut" class="shortcut-input" placeholder="Click to set" readonly>
+          </div>
+        </div>
+      </div>
+
+      <div class="prompt-row">
+        <label class="prompt-label">
+          <span class="toggle-switch">
+            <input type="checkbox" id="prompt6-enabled">
+            <span class="toggle-slider"></span>
+          </span>
+          <span>Prompt 6</span>
+        </label>
+        <div class="prompt-inputs">
+          <input type="text" id="prompt6-name" placeholder="Menu name" maxlength="30">
+          <textarea id="prompt6-text" class="prompt-text" placeholder="Prompt text"></textarea>
+          <div class="context-row">
+            <label class="context-label" for="prompt6-context">Context size:</label>
+            <input type="number" id="prompt6-context" class="context-input" min="0" max="500" step="10" value="0">
+            <span class="context-hint">words before/after selection</span>
+          </div>
+          <div class="shortcut-row">
+            <span class="shortcut-label">Shortcut:</span>
+            <input type="text" id="prompt6-shortcut" class="shortcut-input" placeholder="Click to set" readonly>
+          </div>
+        </div>
+      </div>
+
+      <div class="prompt-row">
+        <label class="prompt-label">
+          <span class="toggle-switch">
+            <input type="checkbox" id="prompt7-enabled">
+            <span class="toggle-slider"></span>
+          </span>
+          <span>Prompt 7</span>
+        </label>
+        <div class="prompt-inputs">
+          <input type="text" id="prompt7-name" placeholder="Menu name" maxlength="30">
+          <textarea id="prompt7-text" class="prompt-text" placeholder="Prompt text"></textarea>
+          <div class="context-row">
+            <label class="context-label" for="prompt7-context">Context size:</label>
+            <input type="number" id="prompt7-context" class="context-input" min="0" max="500" step="10" value="0">
+            <span class="context-hint">words before/after selection</span>
+          </div>
+          <div class="shortcut-row">
+            <span class="shortcut-label">Shortcut:</span>
+            <input type="text" id="prompt7-shortcut" class="shortcut-input" placeholder="Click to set" readonly>
+          </div>
+        </div>
+      </div>
+
+      <div class="prompt-row">
+        <label class="prompt-label">
+          <span class="toggle-switch">
+            <input type="checkbox" id="prompt8-enabled">
+            <span class="toggle-slider"></span>
+          </span>
+          <span>Prompt 8</span>
+        </label>
+        <div class="prompt-inputs">
+          <input type="text" id="prompt8-name" placeholder="Menu name" maxlength="30">
+          <textarea id="prompt8-text" class="prompt-text" placeholder="Prompt text"></textarea>
+          <div class="context-row">
+            <label class="context-label" for="prompt8-context">Context size:</label>
+            <input type="number" id="prompt8-context" class="context-input" min="0" max="500" step="10" value="0">
+            <span class="context-hint">words before/after selection</span>
+          </div>
+          <div class="shortcut-row">
+            <span class="shortcut-label">Shortcut:</span>
+            <input type="text" id="prompt8-shortcut" class="shortcut-input" placeholder="Click to set" readonly>
+          </div>
+        </div>
+      </div>
+
+      <div class="prompt-row">
+        <label class="prompt-label">
+          <span class="toggle-switch">
+            <input type="checkbox" id="prompt9-enabled">
+            <span class="toggle-slider"></span>
+          </span>
+          <span>Prompt 9</span>
+        </label>
+        <div class="prompt-inputs">
+          <input type="text" id="prompt9-name" placeholder="Menu name" maxlength="30">
+          <textarea id="prompt9-text" class="prompt-text" placeholder="Prompt text"></textarea>
+          <div class="context-row">
+            <label class="context-label" for="prompt9-context">Context size:</label>
+            <input type="number" id="prompt9-context" class="context-input" min="0" max="500" step="10" value="0">
+            <span class="context-hint">words before/after selection</span>
+          </div>
+          <div class="shortcut-row">
+            <span class="shortcut-label">Shortcut:</span>
+            <input type="text" id="prompt9-shortcut" class="shortcut-input" placeholder="Click to set" readonly>
+          </div>
+        </div>
+      </div>
+
+      <div class="prompt-row">
+        <label class="prompt-label">
+          <span class="toggle-switch">
+            <input type="checkbox" id="prompt10-enabled">
+            <span class="toggle-slider"></span>
+          </span>
+          <span>Prompt 10</span>
+        </label>
+        <div class="prompt-inputs">
+          <input type="text" id="prompt10-name" placeholder="Menu name" maxlength="30">
+          <textarea id="prompt10-text" class="prompt-text" placeholder="Prompt text"></textarea>
+          <div class="context-row">
+            <label class="context-label" for="prompt10-context">Context size:</label>
+            <input type="number" id="prompt10-context" class="context-input" min="0" max="500" step="10" value="0">
+            <span class="context-hint">words before/after selection</span>
+          </div>
+          <div class="shortcut-row">
+            <span class="shortcut-label">Shortcut:</span>
+            <input type="text" id="prompt10-shortcut" class="shortcut-input" placeholder="Click to set" readonly>
           </div>
         </div>
       </div>

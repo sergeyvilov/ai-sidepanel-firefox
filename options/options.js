@@ -4,6 +4,11 @@ const DEFAULT_PROMPTS = [
   { enabled: true, name: "Translate", text: "Translate to English: %c", contextWords: 0 },
   { enabled: true, name: "Summarize", text: "Summarize: %s", contextWords: 0 },
   { enabled: false, name: "", text: "", contextWords: 0 },
+  { enabled: false, name: "", text: "", contextWords: 0 },
+  { enabled: false, name: "", text: "", contextWords: 0 },
+  { enabled: false, name: "", text: "", contextWords: 0 },
+  { enabled: false, name: "", text: "", contextWords: 0 },
+  { enabled: false, name: "", text: "", contextWords: 0 },
   { enabled: false, name: "", text: "", contextWords: 0 }
 ];
 
@@ -16,7 +21,7 @@ async function loadPrompts() {
   let prompts = data.prompts;
 
   // Check if prompts exist and first 3 have names
-  let needsReset = !prompts || !Array.isArray(prompts) || prompts.length < 5;
+  let needsReset = !prompts || !Array.isArray(prompts);
 
   if (!needsReset) {
     for (let i = 0; i < 3; i++) {
@@ -30,10 +35,15 @@ async function loadPrompts() {
   if (needsReset) {
     prompts = DEFAULT_PROMPTS;
     await browser.storage.sync.set({ prompts: DEFAULT_PROMPTS });
+  } else if (prompts.length < 10) {
+    while (prompts.length < 10) {
+      prompts.push({ enabled: false, name: "", text: "", contextWords: 0 });
+    }
+    await browser.storage.sync.set({ prompts });
   }
 
   // Populate form
-  for (let i = 0; i < 5; i++) {
+  for (let i = 0; i < 10; i++) {
     const prompt = prompts[i] || {};
     const defaultPrompt = DEFAULT_PROMPTS[i];
 
@@ -73,7 +83,7 @@ function autoSavePrompts() {
   saveTimeout = setTimeout(async () => {
     const prompts = [];
 
-    for (let i = 0; i < 5; i++) {
+    for (let i = 0; i < 10; i++) {
       prompts.push({
         enabled: document.getElementById(`prompt${i + 1}-enabled`).checked,
         name: document.getElementById(`prompt${i + 1}-name`).value.trim(),
@@ -96,7 +106,7 @@ async function resetPrompts() {
   await browser.storage.sync.set({ prompts: DEFAULT_PROMPTS });
 
   // Reset shortcuts to defaults
-  for (let i = 1; i <= 5; i++) {
+  for (let i = 1; i <= 10; i++) {
     try {
       await browser.commands.reset(`prompt-${i}`);
     } catch (e) {
@@ -261,7 +271,7 @@ function setupShortcutInput(inputId, commandName) {
 
 // Setup shortcut recording
 function setupShortcutRecording() {
-  for (let i = 1; i <= 5; i++) {
+  for (let i = 1; i <= 10; i++) {
     setupShortcutInput(`prompt${i}-shortcut`, `prompt-${i}`);
   }
 }
@@ -276,7 +286,7 @@ async function saveEnabledState(promptIndex, enabled) {
 
 // Setup auto-save listeners
 function setupAutoSave() {
-  for (let i = 1; i <= 5; i++) {
+  for (let i = 1; i <= 10; i++) {
     const checkbox = document.getElementById(`prompt${i}-enabled`);
     checkbox.addEventListener("change", () => {
       updatePromptDisabledState(i);

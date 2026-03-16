@@ -8,6 +8,11 @@ const DEFAULT_PROMPTS = [
   { enabled: true, name: "Translate", text: "Translate to English: %s", contextWords: 0 },
   { enabled: true, name: "Summarize", text: "Summarize: %s", contextWords: 0 },
   { enabled: false, name: "", text: "", contextWords: 0 },
+  { enabled: false, name: "", text: "", contextWords: 0 },
+  { enabled: false, name: "", text: "", contextWords: 0 },
+  { enabled: false, name: "", text: "", contextWords: 0 },
+  { enabled: false, name: "", text: "", contextWords: 0 },
+  { enabled: false, name: "", text: "", contextWords: 0 },
   { enabled: false, name: "", text: "", contextWords: 0 }
 ];
 
@@ -287,7 +292,7 @@ async function initializePrompts() {
   let prompts = data.prompts;
 
   // Check if prompts are valid
-  let needsReset = !prompts || !Array.isArray(prompts) || prompts.length < 5;
+  let needsReset = !prompts || !Array.isArray(prompts);
 
   if (!needsReset) {
     // Check if first 3 prompts have valid names (required for defaults)
@@ -301,6 +306,12 @@ async function initializePrompts() {
 
   if (needsReset) {
     await browser.storage.sync.set({ prompts: DEFAULT_PROMPTS });
+  } else if (prompts.length < 10) {
+    // Pad short arrays with empty disabled entries
+    while (prompts.length < 10) {
+      prompts.push({ enabled: false, name: "", text: "", contextWords: 0 });
+    }
+    await browser.storage.sync.set({ prompts });
   }
 
   buildContextMenu();

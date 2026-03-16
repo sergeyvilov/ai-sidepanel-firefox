@@ -93,6 +93,21 @@
         "mac": "MacCtrl+Shift+5"
       },
       "description": "Run Prompt 5 on selected text"
+    },
+    "prompt-6": {
+      "description": "Run Prompt 6 on selected text"
+    },
+    "prompt-7": {
+      "description": "Run Prompt 7 on selected text"
+    },
+    "prompt-8": {
+      "description": "Run Prompt 8 on selected text"
+    },
+    "prompt-9": {
+      "description": "Run Prompt 9 on selected text"
+    },
+    "prompt-10": {
+      "description": "Run Prompt 10 on selected text"
     }
   }
 }
