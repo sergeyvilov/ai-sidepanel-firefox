@@ -1,0 +1,98 @@
+{
+  "manifest_version": 2,
+  "name": "AI Sidebar",
+  "version": "2.0",
+  "description": "Select text anywhere and explain it with ChatGPT, Gemini, Claude, or Mistral in a sidebar",
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "chatgpt-sidebar@example.com"
+    }
+  },
+  "permissions": [
+    "contextMenus",
+    "activeTab",
+    "tabs",
+    "storage",
+    "webRequest",
+    "webRequestBlocking",
+    "*://chatgpt.com/*",
+    "*://chat.openai.com/*",
+    "*://gemini.google.com/*",
+    "*://claude.ai/*",
+    "*://chat.mistral.ai/*"
+  ],
+  "background": {
+    "scripts": ["providers.js", "background.js"]
+  },
+  "options_ui": {
+    "page": "options/options.html",
+    "browser_style": true
+  },
+  "sidebar_action": {
+    "default_title": "AI Sidebar",
+    "default_panel": "sidebar/sidebar.html",
+    "default_icon": {
+      "48": "icons/icon-48.png",
+      "96": "icons/icon-96.png"
+    }
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "*://chatgpt.com/*",
+        "*://chat.openai.com/*",
+        "*://gemini.google.com/*",
+        "*://claude.ai/*",
+        "*://chat.mistral.ai/*"
+      ],
+      "js": ["providers.js", "inject.js"],
+      "all_frames": true,
+      "run_at": "document_idle"
+    }
+  ],
+  "icons": {
+    "16": "icons/icon-16.png",
+    "32": "icons/icon-32.png",
+    "48": "icons/icon-48.png",
+    "64": "icons/icon-64.png",
+    "96": "icons/icon-96.png",
+    "128": "icons/icon-128.png"
+  },
+  "commands": {
+    "prompt-1": {
+      "suggested_key": {
+        "default": "Alt+Shift+1",
+        "mac": "MacCtrl+Shift+1"
+      },
+      "description": "Run Prompt 1 (Explain)"
+    },
+    "prompt-2": {
+      "suggested_key": {
+        "default": "Alt+Shift+2",
+        "mac": "MacCtrl+Shift+2"
+      },
+      "description": "Run Prompt 2 (Translate)"
+    },
+    "prompt-3": {
+      "suggested_key": {
+        "default": "Alt+Shift+3",
+        "mac": "MacCtrl+Shift+3"
+      },
+      "description": "Run Prompt 3 (Summarize)"
+    },
+    "prompt-4": {
+      "suggested_key": {
+        "default": "Alt+Shift+4",
+        "mac": "MacCtrl+Shift+4"
+      },
+      "description": "Run Prompt 4 on selected text"
+    },
+    "prompt-5": {
+      "suggested_key": {
+        "default": "Alt+Shift+5",
+        "mac": "MacCtrl+Shift+5"
+      },
+      "description": "Run Prompt 5 on selected text"
+    }
+  }
+}

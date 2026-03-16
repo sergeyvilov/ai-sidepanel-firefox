@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>AI Sidebar Settings</title>
+  <link rel="stylesheet" href="options.css">
+</head>
+<body>
+  <section>
+    <p class="help-text">
+      Configure up to 5 prompts that appear in the right-click menu.<br>
+      Use <code>%s</code> for selected text, <code>%c</code> for selected text with surrounding context, <code>%title</code> for page title, and <code>%url</code> for page URL.<br>
+      <strong>Shortcuts:</strong> Click the shortcut field and press your desired key combination. On AI pages with the sidebar closed, the prompt is typed directly into the page input. Otherwise it opens in the sidebar.
+    </p>
+
+    <div class="prompts-container">
+      <div class="prompt-row">
+        <label class="prompt-label">
+          <span class="toggle-switch">
+            <input type="checkbox" id="prompt1-enabled" checked>
+            <span class="toggle-slider"></span>
+          </span>
+          <span>Prompt 1</span>
+        </label>
+        <div class="prompt-inputs">
+          <input type="text" id="prompt1-name" placeholder="Menu name (e.g., Explain)" maxlength="30">
+          <textarea id="prompt1-text" class="prompt-text" placeholder="Prompt text (e.g., Explain: %s)"></textarea>
+          <div class="context-row">
+            <label class="context-label" for="prompt1-context">Context size:</label>
+            <input type="number" id="prompt1-context" class="context-input" min="0" max="500" step="10" value="0">
+            <span class="context-hint">words before/after selection for <code>%c</code></span>
+          </div>
+          <div class="shortcut-row">
+            <span class="shortcut-label">Shortcut:</span>
+            <input type="text" id="prompt1-shortcut" class="shortcut-input" placeholder="Click to set" readonly>
+          </div>
+        </div>
+      </div>
+
+      <div class="prompt-row">
+        <label class="prompt-label">
+          <span class="toggle-switch">
+            <input type="checkbox" id="prompt2-enabled" checked>
+            <span class="toggle-slider"></span>
+          </span>
+          <span>Prompt 2</span>
+        </label>
+        <div class="prompt-inputs">
+          <input type="text" id="prompt2-name" placeholder="Menu name (e.g., Translate)" maxlength="30">
+          <textarea id="prompt2-text" class="prompt-text" placeholder="Prompt text (e.g., Translate to English: %s)"></textarea>
+          <div class="context-row">
+            <label class="context-label" for="prompt2-context">Context size:</label>
+            <input type="number" id="prompt2-context" class="context-input" min="0" max="500" step="10" value="0">
+            <span class="context-hint">words before/after selection for <code>%c</code></span>
+          </div>
+          <div class="shortcut-row">
+            <span class="shortcut-label">Shortcut:</span>
+            <input type="text" id="prompt2-shortcut" class="shortcut-input" placeholder="Click to set" readonly>
+          </div>
+        </div>
+      </div>
+
+      <div class="prompt-row">
+        <label class="prompt-label">
+          <span class="toggle-switch">
+            <input type="checkbox" id="prompt3-enabled" checked>
+            <span class="toggle-slider"></span>
+          </span>
+          <span>Prompt 3</span>
+        </label>
+        <div class="prompt-inputs">
+          <input type="text" id="prompt3-name" placeholder="Menu name (e.g., Summarize)" maxlength="30">
+          <textarea id="prompt3-text" class="prompt-text" placeholder="Prompt text (e.g., Summarize: %s)"></textarea>
+          <div class="context-row">
+            <label class="context-label" for="prompt3-context">Context size:</label>
+            <input type="number" id="prompt3-context" class="context-input" min="0" max="500" step="10" value="0">
+            <span class="context-hint">words before/after selection for <code>%c</code></span>
+          </div>
+          <div class="shortcut-row">
+            <span class="shortcut-label">Shortcut:</span>
+            <input type="text" id="prompt3-shortcut" class="shortcut-input" placeholder="Click to set" readonly>
+          </div>
+        </div>
+      </div>
+
+      <div class="prompt-row">
+        <label class="prompt-label">
+          <span class="toggle-switch">
+            <input type="checkbox" id="prompt4-enabled">
+            <span class="toggle-slider"></span>
+          </span>
+          <span>Prompt 4</span>
+        </label>
+        <div class="prompt-inputs">
+          <input type="text" id="prompt4-name" placeholder="Menu name" maxlength="30">
+          <textarea id="prompt4-text" class="prompt-text" placeholder="Prompt text"></textarea>
+          <div class="context-row">
+            <label class="context-label" for="prompt4-context">Context size:</label>
+            <input type="number" id="prompt4-context" class="context-input" min="0" max="500" step="10" value="0">
+            <span class="context-hint">words before/after selection for <code>%c</code></span>
+          </div>
+          <div class="shortcut-row">
+            <span class="shortcut-label">Shortcut:</span>
+            <input type="text" id="prompt4-shortcut" class="shortcut-input" placeholder="Click to set" readonly>
+          </div>
+        </div>
+      </div>
+
+      <div class="prompt-row">
+        <label class="prompt-label">
+          <span class="toggle-switch">
+            <input type="checkbox" id="prompt5-enabled">
+            <span class="toggle-slider"></span>
+          </span>
+          <span>Prompt 5</span>
+        </label>
+        <div class="prompt-inputs">
+          <input type="text" id="prompt5-name" placeholder="Menu name" maxlength="30">
+          <textarea id="prompt5-text" class="prompt-text" placeholder="Prompt text"></textarea>
+          <div class="context-row">
+            <label class="context-label" for="prompt5-context">Context size:</label>
+            <input type="number" id="prompt5-context" class="context-input" min="0" max="500" step="10" value="0">
+            <span class="context-hint">words before/after selection for <code>%c</code></span>
+          </div>
+          <div class="shortcut-row">
+            <span class="shortcut-label">Shortcut:</span>
+            <input type="text" id="prompt5-shortcut" class="shortcut-input" placeholder="Click to set" readonly>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="buttons" style="justify-content: flex-end;">
+      <button id="reset-btn">Reset to Defaults</button>
+    </div>
+
+    <div id="status" class="status"></div>
+  </section>
+
+  <script src="options.js"></script>
+</body>
+</html>

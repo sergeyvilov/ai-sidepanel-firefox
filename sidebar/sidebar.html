@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>AI Sidebar</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { width: 100%; height: 100%; overflow: hidden; display: flex; flex-direction: column; }
+
+    #provider-bar {
+      display: flex;
+      align-items: center;
+      padding: 8px 12px;
+      background: #f5f5f5;
+      border-bottom: 1px solid #ddd;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+
+    #provider-bar label {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      font-size: 13px;
+      color: #555;
+    }
+
+    #provider-select {
+      flex: 1;
+      padding: 6px 10px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 13px;
+      background: white;
+      cursor: pointer;
+      max-width: 200px;
+    }
+
+    #provider-select:focus {
+      outline: none;
+      border-color: #2980b9;
+      box-shadow: 0 0 0 2px rgba(41, 128, 185, 0.2);
+    }
+
+    #detach-btn {
+      background: none;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      padding: 6px 10px;
+      cursor: pointer;
+      font-size: 13px;
+      color: #555;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    #detach-btn:hover {
+      background: #e8e8e8;
+      border-color: #999;
+    }
+
+    #detach-btn svg {
+      width: 14px;
+      height: 14px;
+    }
+
+    #ai-frame {
+      flex: 1;
+      width: 100%;
+      border: none;
+    }
+
+    #welcome-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.85);
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    #welcome-box {
+      background: white;
+      border-radius: 12px;
+      padding: 24px;
+      max-width: 320px;
+      text-align: center;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    #welcome-box h2 {
+      margin-bottom: 16px;
+      color: #333;
+      font-size: 18px;
+    }
+
+    #welcome-box p {
+      color: #555;
+      font-size: 14px;
+      line-height: 1.5;
+      margin-bottom: 12px;
+    }
+
+    #welcome-box .tip {
+      background: #e4f0fc;
+      padding: 12px;
+      border-radius: 8px;
+      margin: 16px 0;
+      font-size: 13px;
+      color: #2980b9;
+    }
+
+    #welcome-box .tip strong {
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    #welcome-btn {
+      background: #2980b9;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 6px;
+      font-size: 14px;
+      cursor: pointer;
+      margin-top: 8px;
+    }
+
+    #welcome-btn:hover {
+      background: #2471a3;
+    }
+
+    .hidden { display: none !important; }
+  </style>
+</head>
+<body>
+  <div id="provider-bar">
+    <label for="provider-select">Provider:</label>
+    <select id="provider-select">
+      <option value="chatgpt">ChatGPT</option>
+      <option value="gemini">Google Gemini</option>
+      <option value="claude">Claude</option>
+      <option value="mistral">Le Chat Mistral</option>
+    </select>
+    <button id="detach-btn" title="Open in separate window">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+        <polyline points="15 3 21 3 21 9"/>
+        <line x1="10" y1="14" x2="21" y2="3"/>
+      </svg>
+      Detach
+    </button>
+  </div>
+
+  <div id="welcome-overlay" class="hidden">
+    <div id="welcome-box">
+      <h2>Welcome to AI Sidebar!</h2>
+      <p>Select text on any page and use the right-click menu or keyboard shortcuts to send it to your AI assistant.</p>
+      <div class="tip">
+        <strong>Keyboard Shortcuts</strong>
+        Control+Shift+1 (Explain), Control+Shift+2 (Translate), Control+Shift+3 (Summarize)
+      </div>
+      <button id="welcome-btn">Got it!</button>
+    </div>
+  </div>
+
+  <iframe id="ai-frame" src="https://chatgpt.com"></iframe>
+
+  <script src="../providers.js"></script>
+  <script src="sidebar.js"></script>
+</body>
+</html>

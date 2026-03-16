@@ -1,0 +1,5 @@
+.*
+*-test.html
+!.gitignore
+*_files/
+CLAUDE.MD
