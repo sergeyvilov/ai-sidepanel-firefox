@@ -8,9 +8,16 @@
 <body>
   <section>
     <p class="help-text">
-      Configure up to 5 prompts that appear in the right-click menu.<br>
-      Use <code>%s</code> for selected text, <code>%c</code> for selected text with surrounding context, <code>%title</code> for page title, and <code>%url</code> for page URL.<br>
-      <strong>Shortcuts:</strong> Click the shortcut field and press your desired key combination. On AI pages with the sidebar closed, the prompt is typed directly into the page input. Otherwise it opens in the sidebar.
+      This extension automatically sends pre-defined prompts with the highlighted text to an AI sidebar.
+      Configure up to 5 prompts that appear in the right-click menu or can be invoked through special shortcuts.
+      In your prompt, <code>%s</code> will be automatically substituted with the selected text,
+      <code>%c</code> will be substituted with the snippet including N words before and N words after the selected text,
+      <code>%title</code> will be substituted with the title of the current page,
+      <code>%url</code> will be substituted with the url of the current page.
+      <strong>Shortcuts</strong>: Click the shortcut field and press your desired key combination.
+      <strong>ChatGPT/Claude/Gemini pages with the sidebar</strong>:
+      1.&nbsp;If the sidebar is closed, the prompt is auto-typed into the page input.
+      2.&nbsp;If the sidebar is opened, the prompt is sent to the sidebar.
     </p>
 
     <div class="prompts-container">
@@ -28,7 +35,7 @@
           <div class="context-row">
             <label class="context-label" for="prompt1-context">Context size:</label>
             <input type="number" id="prompt1-context" class="context-input" min="0" max="500" step="10" value="0">
-            <span class="context-hint">words before/after selection for <code>%c</code></span>
+            <span class="context-hint">words before/after selection</span>
           </div>
           <div class="shortcut-row">
             <span class="shortcut-label">Shortcut:</span>
@@ -51,7 +58,7 @@
           <div class="context-row">
             <label class="context-label" for="prompt2-context">Context size:</label>
             <input type="number" id="prompt2-context" class="context-input" min="0" max="500" step="10" value="0">
-            <span class="context-hint">words before/after selection for <code>%c</code></span>
+            <span class="context-hint">words before/after selection</span>
           </div>
           <div class="shortcut-row">
             <span class="shortcut-label">Shortcut:</span>
@@ -74,7 +81,7 @@
           <div class="context-row">
             <label class="context-label" for="prompt3-context">Context size:</label>
             <input type="number" id="prompt3-context" class="context-input" min="0" max="500" step="10" value="0">
-            <span class="context-hint">words before/after selection for <code>%c</code></span>
+            <span class="context-hint">words before/after selection</span>
           </div>
           <div class="shortcut-row">
             <span class="shortcut-label">Shortcut:</span>
@@ -97,7 +104,7 @@
           <div class="context-row">
             <label class="context-label" for="prompt4-context">Context size:</label>
             <input type="number" id="prompt4-context" class="context-input" min="0" max="500" step="10" value="0">
-            <span class="context-hint">words before/after selection for <code>%c</code></span>
+            <span class="context-hint">words before/after selection</span>
           </div>
           <div class="shortcut-row">
             <span class="shortcut-label">Shortcut:</span>
@@ -120,7 +127,7 @@
           <div class="context-row">
             <label class="context-label" for="prompt5-context">Context size:</label>
             <input type="number" id="prompt5-context" class="context-input" min="0" max="500" step="10" value="0">
-            <span class="context-hint">words before/after selection for <code>%c</code></span>
+            <span class="context-hint">words before/after selection</span>
           </div>
           <div class="shortcut-row">
             <span class="shortcut-label">Shortcut:</span>

@@ -1,7 +1,7 @@
 // Default prompts
 const DEFAULT_PROMPTS = [
   { enabled: true, name: "Explain", text: "Explain: %s", contextWords: 0 },
-  { enabled: true, name: "Translate", text: "Translate to English: %s", contextWords: 0 },
+  { enabled: true, name: "Translate", text: "Translate to English: %c", contextWords: 0 },
   { enabled: true, name: "Summarize", text: "Summarize: %s", contextWords: 0 },
   { enabled: false, name: "", text: "", contextWords: 0 },
   { enabled: false, name: "", text: "", contextWords: 0 }
