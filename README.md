@@ -1,6 +1,6 @@
 # AI Sidebar Extension
 
-A Firefox extension that adds a sidebar with AI chat providers (ChatGPT, Gemini, Claude, Mistral) and lets you send selected text to them using custom prompts — via the context menu or keyboard shortcuts.
+A browser extension for Firefox and Chrome that adds a sidebar with AI chat providers (ChatGPT, Gemini, Claude, Mistral) and lets you send selected text to them using custom prompts — via the context menu or keyboard shortcuts.
 
 ## Supported AI Providers
 
@@ -85,9 +85,18 @@ The sidebar can be detached into a standalone popup window. The detached window 
 
 ## Installation
 
+### Firefox
+
 1. Open Firefox and navigate to `about:debugging#/runtime/this-firefox`
 2. Click **Load Temporary Add-on...**
 3. Select the `manifest.json` file from this project
+
+### Chrome
+
+1. Copy `manifest_chrome.json` to `manifest.json` (back up the original Firefox manifest first)
+2. Open Chrome and navigate to `chrome://extensions`
+3. Enable **Developer mode** (toggle in top-right)
+4. Click **Load unpacked** and select the project folder
 
 ## Configuration
 

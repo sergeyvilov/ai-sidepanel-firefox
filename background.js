@@ -1,3 +1,8 @@
+// Load dependencies in service worker (Chrome MV3)
+if (typeof importScripts === "function") {
+  importScripts("compat.js", "providers.js");
+}
+
 console.log("Background script loading...");
 console.log("PROVIDERS available:", typeof PROVIDERS !== 'undefined');
 console.log("DEFAULT_PROVIDER:", typeof DEFAULT_PROVIDER !== 'undefined' ? DEFAULT_PROVIDER : 'NOT DEFINED');
@@ -16,43 +21,7 @@ const DEFAULT_PROMPTS = [
   { enabled: false, name: "", text: "", contextWords: 0 }
 ];
 
-// Get selected text with surrounding context from a tab
-async function getSelectionWithContext(tabId, contextWords) {
-  if (contextWords <= 0) {
-    const results = await browser.tabs.executeScript(tabId, {
-      code: "window.getSelection().toString();"
-    });
-    const text = results[0] || "";
-    return { selectedText: text, contextText: text };
-  }
-
-  const results = await browser.tabs.executeScript(tabId, {
-    code: `(function() {
-      const sel = window.getSelection();
-      if (!sel.rangeCount) return JSON.stringify({ selectedText: "", beforeContext: "", afterContext: "" });
-      const range = sel.getRangeAt(0);
-      const selectedText = sel.toString();
-
-      const beforeRange = document.createRange();
-      beforeRange.setStart(document.body, 0);
-      beforeRange.setEnd(range.startContainer, range.startOffset);
-      const beforeWords = beforeRange.toString().split(/\\s+/).filter(Boolean);
-      const beforeContext = beforeWords.slice(-${contextWords}).join(" ");
-
-      const afterRange = document.createRange();
-      afterRange.setStart(range.endContainer, range.endOffset);
-      afterRange.setEnd(document.body, document.body.childNodes.length);
-      const afterWords = afterRange.toString().split(/\\s+/).filter(Boolean);
-      const afterContext = afterWords.slice(0, ${contextWords}).join(" ");
-
-      return JSON.stringify({ selectedText, beforeContext, afterContext });
-    })();`
-  });
-
-  const parsed = JSON.parse(results[0]);
-  const contextText = `<before>${parsed.beforeContext}</before>[SELECTION]${parsed.selectedText}[/SELECTION]<after>${parsed.afterContext}</after>`;
-  return { selectedText: parsed.selectedText, contextText };
-}
+// getSelectionWithContext and getSelectedText are provided by compat.js
 
 // Centralized placeholder substitution
 function replacePlaceholders(promptText, selectedText, contextText, pageTitle, pageUrl) {
@@ -191,10 +160,12 @@ browser.contextMenus.onClicked.addListener((info, tab) => {
 
     const hasDetachedWindow = detachedWindowIds.size > 0;
 
-    // Only open sidebar if no detached windows exist
+    // Only open sidebar/panel if no detached windows exist
     if (!hasDetachedWindow) {
-      // MUST open sidebar synchronously before any await calls
-      browser.sidebarAction.open();
+      if (IS_FIREFOX) {
+        // Firefox: MUST open sidebar synchronously before any await calls
+        browser.sidebarAction.open();
+      }
     }
 
     // Look up the prompt to check if context is needed
@@ -204,6 +175,11 @@ browser.contextMenus.onClicked.addListener((info, tab) => {
     const needsContext = prompt && prompt.text.includes('%c') && contextWords > 0;
 
     const doExecute = async () => {
+      // Chrome: open side panel async (gesture context preserved through await)
+      if (!hasDetachedWindow && IS_CHROME) {
+        await openSidePanel(tab.windowId);
+      }
+
       let selectedText = info.selectionText;
       let contextText = info.selectionText;
 
@@ -238,21 +214,24 @@ browser.storage.onChanged.addListener((changes, area) => {
 // from user input handlers
 
 // Strip X-Frame-Options and CSP headers from all provider responses
-browser.webRequest.onHeadersReceived.addListener(
-  (details) => {
-    const headers = details.responseHeaders.filter(header => {
-      const name = header.name.toLowerCase();
-      return name !== "x-frame-options" &&
-             name !== "content-security-policy" &&
-             name !== "content-security-policy-report-only";
-    });
-    return { responseHeaders: headers };
-  },
-  {
-    urls: getAllProviderUrls()
-  },
-  ["blocking", "responseHeaders"]
-);
+// Firefox: use webRequest blocking. Chrome: uses declarativeNetRequest rules (chrome_rules.json)
+if (IS_FIREFOX) {
+  browser.webRequest.onHeadersReceived.addListener(
+    (details) => {
+      const headers = details.responseHeaders.filter(header => {
+        const name = header.name.toLowerCase();
+        return name !== "x-frame-options" &&
+               name !== "content-security-policy" &&
+               name !== "content-security-policy-report-only";
+      });
+      return { responseHeaders: headers };
+    },
+    {
+      urls: getAllProviderUrls()
+    },
+    ["blocking", "responseHeaders"]
+  );
+}
 
 // Listen for messages from sidebar
 browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
@@ -324,10 +303,10 @@ function isProviderUrl(url) {
   } catch { return false; }
 }
 
-// Smart prompt routing: detect AI page + sidebar state
+// Smart prompt routing: detect AI page + sidebar/panel state
 async function handleSmartPrompt(promptIndex) {
   const win = await browser.windows.getCurrent();
-  const sidebarOpen = await browser.sidebarAction.isOpen({ windowId: win.id });
+  const sidebarOpen = await isSidePanelOpen(win.id);
 
   if (sidebarOpen) {
     handleKeyboardShortcut(promptIndex, false);
@@ -349,9 +328,19 @@ browser.commands.onCommand.addListener((command) => {
     // On AI page — check sidebar state, then route
     handleSmartPrompt(promptIndex);
   } else {
-    // Not on AI page — open sidebar synchronously (user gesture context required)
-    browser.sidebarAction.open();
-    handleKeyboardShortcut(promptIndex, false);
+    // Not on AI page — open sidebar/panel
+    if (IS_FIREFOX) {
+      // Firefox: open synchronously (user gesture context required)
+      browser.sidebarAction.open();
+      handleKeyboardShortcut(promptIndex, false);
+    } else {
+      // Chrome: open async, then handle shortcut
+      (async () => {
+        const [tab] = await browser.tabs.query({ active: true, currentWindow: true });
+        if (tab) await openSidePanel(tab.windowId);
+        handleKeyboardShortcut(promptIndex, false);
+      })();
+    }
   }
 });
 
@@ -389,10 +378,7 @@ async function handleKeyboardShortcut(promptIndex, hasDetachedWindow) {
       selectedText = result.selectedText;
       contextText = result.contextText;
     } else {
-      const results = await browser.tabs.executeScript(tab.id, {
-        code: "window.getSelection().toString();"
-      });
-      selectedText = results[0] || "";
+      selectedText = await getSelectedText(tab.id);
       contextText = selectedText;
     }
 
@@ -470,10 +456,7 @@ async function handleDirectInjection(promptIndex) {
       selectedText = result.selectedText;
       contextText = result.contextText;
     } else {
-      const results = await browser.tabs.executeScript(tab.id, {
-        code: "window.getSelection().toString();"
-      });
-      selectedText = results[0] || "";
+      selectedText = await getSelectedText(tab.id);
       contextText = selectedText;
     }
 
