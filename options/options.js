@@ -94,6 +94,20 @@ function autoSavePrompts() {
 
     try {
       await browser.storage.sync.set({ prompts });
+
+      // Update command descriptions to match prompt names (Firefox only)
+      if (IS_FIREFOX) {
+        for (let i = 0; i < prompts.length; i++) {
+          const name = prompts[i].name || `Prompt ${i + 1}`;
+          try {
+            await browser.commands.update({
+              name: `prompt-${i + 1}`,
+              description: `Run ${name}`
+            });
+          } catch (e) { /* ignore */ }
+        }
+      }
+
       showStatus("Saved", "success");
     } catch (e) {
       showStatus("Error saving: " + e.message, "error");
@@ -287,13 +301,44 @@ function setupShortcutInput(inputId, commandName) {
   });
 }
 
+// Show popup directing Chrome users to chrome://extensions/shortcuts
+function showChromeShortcutPopup() {
+  // Don't show if already visible
+  if (document.querySelector(".chrome-shortcut-overlay")) return;
+
+  const overlay = document.createElement("div");
+  overlay.className = "chrome-shortcut-overlay";
+
+  const popup = document.createElement("div");
+  popup.className = "chrome-shortcut-popup";
+  popup.innerHTML = `
+    <button class="close-btn">&times;</button>
+    <p>You can change keyboard shortcuts in<br>
+    <a id="chrome-shortcuts-link">chrome://extensions/shortcuts</a></p>
+  `;
+
+  const close = () => { overlay.remove(); popup.remove(); };
+  popup.querySelector(".close-btn").addEventListener("click", close);
+  overlay.addEventListener("click", close);
+  popup.querySelector("#chrome-shortcuts-link").addEventListener("click", () => {
+    browser.tabs.create({ url: "chrome://extensions/shortcuts" });
+    close();
+  });
+
+  document.body.appendChild(overlay);
+  document.body.appendChild(popup);
+}
+
 // Setup shortcut recording
 function setupShortcutRecording() {
   if (IS_CHROME) {
-    // Chrome doesn't support commands.update() — shortcuts are managed at chrome://extensions/shortcuts
+    // Chrome doesn't support commands.update() — show popup directing to chrome://extensions/shortcuts
     for (let i = 1; i <= 10; i++) {
       const input = document.getElementById(`prompt${i}-shortcut`);
-      if (input) input.disabled = true;
+      if (input) {
+        input.style.cursor = "pointer";
+        input.addEventListener("click", showChromeShortcutPopup);
+      }
     }
     return;
   }

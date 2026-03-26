@@ -285,3 +285,54 @@ button.primary:hover:not(:disabled) {
   background: #f8d7da;
   color: #721c24;
 }
+
+.chrome-shortcut-popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  padding: 24px 28px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  max-width: 360px;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #333;
+}
+
+.chrome-shortcut-popup .close-btn {
+  position: absolute;
+  top: 8px;
+  right: 12px;
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: #999;
+  padding: 0;
+  line-height: 1;
+}
+
+.chrome-shortcut-popup .close-btn:hover {
+  color: #333;
+}
+
+.chrome-shortcut-popup a {
+  color: #2980b9;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.chrome-shortcut-popup a:hover {
+  color: #1a5276;
+}
+
+.chrome-shortcut-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.3);
+  z-index: 999;
+}
