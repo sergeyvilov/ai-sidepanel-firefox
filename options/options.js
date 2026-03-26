@@ -105,12 +105,14 @@ function autoSavePrompts() {
 async function resetPrompts() {
   await browser.storage.sync.set({ prompts: DEFAULT_PROMPTS });
 
-  // Reset shortcuts to defaults
-  for (let i = 1; i <= 10; i++) {
-    try {
-      await browser.commands.reset(`prompt-${i}`);
-    } catch (e) {
-      // Ignore errors
+  // Reset shortcuts to defaults (Firefox only — Chrome doesn't support commands.reset)
+  if (IS_FIREFOX) {
+    for (let i = 1; i <= 10; i++) {
+      try {
+        await browser.commands.reset(`prompt-${i}`);
+      } catch (e) {
+        // Ignore errors
+      }
     }
   }
 
@@ -133,16 +135,32 @@ function showStatus(message, type) {
 
 // Load and display current shortcuts
 async function loadShortcuts() {
-  const commands = await browser.commands.getAll();
-  for (const cmd of commands) {
-    let input = null;
-    if (cmd.name.startsWith("prompt-")) {
+  try {
+    const commands = await browser.commands.getAll();
+    for (const cmd of commands) {
+      if (!cmd.name || !cmd.name.startsWith("prompt-")) continue;
       const num = cmd.name.split("-")[1];
-      input = document.getElementById(`prompt${num}-shortcut`);
+      const input = document.getElementById(`prompt${num}-shortcut`);
+      if (input) {
+        input.value = cmd.shortcut || "";
+        input.placeholder = cmd.shortcut ? "" : (IS_CHROME ? "Set in chrome://extensions/shortcuts" : "Click to set");
+      }
     }
-    if (input) {
-      input.value = cmd.shortcut || "";
-      input.placeholder = cmd.shortcut ? "" : "Click to set";
+  } catch (e) {
+    console.error("Error loading shortcuts:", e);
+  }
+
+  // Chrome: mark shortcut fields for commands not in the manifest as unavailable
+  if (IS_CHROME) {
+    const commands = await browser.commands.getAll().catch(() => []);
+    const registeredNums = new Set(commands.map(c => c.name?.split("-")[1]));
+    for (let i = 1; i <= 10; i++) {
+      const input = document.getElementById(`prompt${i}-shortcut`);
+      if (input && !registeredNums.has(String(i))) {
+        input.value = "";
+        input.placeholder = "Not available in Chrome";
+        input.disabled = true;
+      }
     }
   }
 }
@@ -271,6 +289,14 @@ function setupShortcutInput(inputId, commandName) {
 
 // Setup shortcut recording
 function setupShortcutRecording() {
+  if (IS_CHROME) {
+    // Chrome doesn't support commands.update() — shortcuts are managed at chrome://extensions/shortcuts
+    for (let i = 1; i <= 10; i++) {
+      const input = document.getElementById(`prompt${i}-shortcut`);
+      if (input) input.disabled = true;
+    }
+    return;
+  }
   for (let i = 1; i <= 10; i++) {
     setupShortcutInput(`prompt${i}-shortcut`, `prompt-${i}`);
   }
