@@ -159,10 +159,11 @@ browser.contextMenus.onClicked.addListener((info, tab) => {
     console.log("Executing prompt index:", promptIndex, "with text:", info.selectionText?.substring(0, 30));
 
     const hasDetachedWindow = detachedWindowIds.size > 0;
+    const onAiPage = isProviderUrl(tab.url);
 
-    // Only open sidebar/panel if no detached windows exist
+    // Only open sidebar/panel if not on AI page and no detached windows
     // MUST be called synchronously in the event handler for user gesture context
-    if (!hasDetachedWindow) {
+    if (!hasDetachedWindow && !onAiPage) {
       openSidePanel(tab.windowId);
     }
 
@@ -183,6 +184,21 @@ browser.contextMenus.onClicked.addListener((info, tab) => {
           contextText = result.contextText;
         } catch (e) {
           console.log("Context fetch failed, using selectionText:", e);
+        }
+      }
+
+      // Smart routing: on AI page with sidebar closed, inject directly
+      if (onAiPage && !hasDetachedWindow) {
+        const win = await browser.windows.getCurrent();
+        const sidebarOpen = await isSidePanelOpen(win.id);
+        if (!sidebarOpen) {
+          const formattedText = replacePlaceholders(prompt.text, selectedText, contextText, tab.title || "", tab.url || "");
+          try {
+            await browser.tabs.sendMessage(tab.id, { type: "fill-input", text: formattedText }, { frameId: 0 });
+          } catch (e) {
+            console.log("Direct inject failed:", e);
+          }
+          return;
         }
       }
 
