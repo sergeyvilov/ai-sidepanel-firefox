@@ -23,7 +23,8 @@
     "service_worker": "background.js"
   },
   "options_ui": {
-    "page": "options/options.html"
+    "page": "options/options.html",
+    "open_in_tab": true
   },
   "side_panel": {
     "default_path": "sidebar/sidebar.html"
