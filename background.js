@@ -170,7 +170,7 @@ browser.contextMenus.onClicked.addListener((info, tab) => {
     // Only open sidebar/panel if not on AI page and no detached windows
     // MUST be called synchronously in the event handler for user gesture context
     if (!hasDetachedWindow && !onAiPage) {
-      openSidePanel(tab.windowId);
+      openSidePanel(tab.id);
     }
 
     // Look up the prompt to check if context is needed
@@ -346,7 +346,7 @@ browser.commands.onCommand.addListener((command, tab) => {
   } else {
     // Not on AI page — open sidebar/panel synchronously for user gesture context
     if (tab) {
-      openSidePanel(tab.windowId);
+      openSidePanel(tab.id);
     } else {
       openSidePanel();
     }

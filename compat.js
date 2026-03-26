@@ -11,11 +11,12 @@ const IS_FIREFOX = typeof browser !== "undefined" && !!browser.sidebarAction;
 
 // Open the side panel / sidebar
 // Called synchronously from event handlers for user gesture context
-function openSidePanel(windowId) {
+function openSidePanel(tabId) {
   if (IS_FIREFOX) {
     browser.sidebarAction.open();
-  } else if (IS_CHROME && windowId) {
-    chrome.sidePanel.open({ windowId });
+  } else if (IS_CHROME && tabId) {
+    chrome.sidePanel.open({ tabId })
+      .catch(e => console.error("sidePanel.open() failed:", e));
   }
 }
 
