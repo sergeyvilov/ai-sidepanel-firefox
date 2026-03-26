@@ -93,7 +93,7 @@ async function buildContextMenu() {
       id: "ai-assistant-parent",
       title: "AI Assistant",
       contexts: ["selection"]
-    });
+    }, () => void browser.runtime.lastError);
 
     // Create submenu items for all enabled prompts
     enabledPrompts.forEach((prompt, index) => {
@@ -102,7 +102,7 @@ async function buildContextMenu() {
         parentId: "ai-assistant-parent",
         title: prompt.name,
         contexts: ["selection"]
-      });
+      }, () => void browser.runtime.lastError);
     });
 
   } catch (e) {
