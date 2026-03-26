@@ -161,11 +161,9 @@ browser.contextMenus.onClicked.addListener((info, tab) => {
     const hasDetachedWindow = detachedWindowIds.size > 0;
 
     // Only open sidebar/panel if no detached windows exist
+    // MUST be called synchronously in the event handler for user gesture context
     if (!hasDetachedWindow) {
-      if (IS_FIREFOX) {
-        // Firefox: MUST open sidebar synchronously before any await calls
-        browser.sidebarAction.open();
-      }
+      openSidePanel(tab.windowId);
     }
 
     // Look up the prompt to check if context is needed
@@ -175,11 +173,6 @@ browser.contextMenus.onClicked.addListener((info, tab) => {
     const needsContext = prompt && prompt.text.includes('%c') && contextWords > 0;
 
     const doExecute = async () => {
-      // Chrome: open side panel async (gesture context preserved through await)
-      if (!hasDetachedWindow && IS_CHROME) {
-        await openSidePanel(tab.windowId);
-      }
-
       let selectedText = info.selectionText;
       let contextText = info.selectionText;
 
@@ -316,7 +309,8 @@ async function handleSmartPrompt(promptIndex) {
 }
 
 // Handle keyboard shortcuts
-browser.commands.onCommand.addListener((command) => {
+// Chrome passes tab as second arg; Firefox does not
+browser.commands.onCommand.addListener((command, tab) => {
   if (!command.startsWith("prompt-")) return;
 
   const promptIndex = parseInt(command.split("-")[1]) - 1;
@@ -328,19 +322,13 @@ browser.commands.onCommand.addListener((command) => {
     // On AI page — check sidebar state, then route
     handleSmartPrompt(promptIndex);
   } else {
-    // Not on AI page — open sidebar/panel
-    if (IS_FIREFOX) {
-      // Firefox: open synchronously (user gesture context required)
-      browser.sidebarAction.open();
-      handleKeyboardShortcut(promptIndex, false);
+    // Not on AI page — open sidebar/panel synchronously for user gesture context
+    if (tab) {
+      openSidePanel(tab.windowId);
     } else {
-      // Chrome: open async, then handle shortcut
-      (async () => {
-        const [tab] = await browser.tabs.query({ active: true, currentWindow: true });
-        if (tab) await openSidePanel(tab.windowId);
-        handleKeyboardShortcut(promptIndex, false);
-      })();
+      openSidePanel();
     }
+    handleKeyboardShortcut(promptIndex, false);
   }
 });
 
