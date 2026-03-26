@@ -18,10 +18,28 @@ h2 {
 }
 
 .help-text {
-  font-size: 1.8em;
+  font-size: 14px;
   color: #666;
   margin-bottom: 20px;
-  line-height: 1.5;
+  line-height: 1.6;
+}
+
+.help-text p {
+  margin: 0 0 10px 0;
+}
+
+.help-text ul {
+  margin: 4px 0 10px 0;
+  padding-left: 20px;
+}
+
+.help-text li {
+  margin-bottom: 2px;
+}
+
+.help-text ol {
+  margin: 4px 0 0 0;
+  padding-left: 20px;
 }
 
 .help-text code {

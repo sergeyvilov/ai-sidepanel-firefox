@@ -7,20 +7,22 @@
 </head>
 <body>
   <section>
-    <p class="help-text">
-      This extension automatically sends pre-defined prompts with the highlighted text to an AI sidebar. <br><br>
-      Configure up to 10 prompts that appear in the right-click menu or can be invoked through special shortcuts.<br>
-      In your prompt, <code>%s</code> will be automatically substituted with the selected text,
-      <code>%c</code> will be substituted with the snippet including N words before and N words after the selected text,
-      <code>%title</code> will be substituted with the title of the current page,
-      <code>%url</code> will be substituted with the url of the current page.
-      <br><br>
-      <strong>Shortcuts</strong>: Click the shortcut field and press your desired key combination.
-      <br>
-      <strong>ChatGPT/Claude/Gemini pages with the sidebar</strong>:
-      1.&nbsp;If the sidebar is closed, the prompt is auto-typed into the page input.
-      2.&nbsp;If the sidebar is opened, the prompt is sent to the sidebar.
-    </p>
+    <div class="help-text">
+      <p>Configure up to 10 prompts that appear in the right-click menu or can be triggered via keyboard shortcuts.</p>
+      <p><strong>Placeholders</strong> in prompt text:</p>
+      <ul>
+        <li><code>%s</code> &mdash; selected text</li>
+        <li><code>%c</code> &mdash; selected text with N surrounding words (set via Context size)</li>
+        <li><code>%title</code> &mdash; page title</li>
+        <li><code>%url</code> &mdash; page URL</li>
+      </ul>
+      <p><strong>Shortcuts</strong>: Click the shortcut field and press your desired key combination.</p>
+      <p><strong>On AI provider pages</strong> (ChatGPT, Claude, Gemini, Mistral):</p>
+      <ol>
+        <li>Sidebar closed &rarr; prompt is typed directly into the page input</li>
+        <li>Sidebar open &rarr; prompt is sent to the sidebar</li>
+      </ol>
+    </div>
 
     <div class="prompts-container">
       <div class="prompt-row">
