@@ -1,18 +1,20 @@
 {
-  "manifest_version": 3,
+  "manifest_version": 2,
   "name": "AI Sidebar",
   "version": "2.0",
   "description": "Select text anywhere and explain it with ChatGPT, Gemini, Claude, or Mistral in a sidebar",
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "chatgpt-sidebar@example.com"
+    }
+  },
   "permissions": [
     "contextMenus",
     "activeTab",
     "tabs",
     "storage",
-    "sidePanel",
-    "scripting",
-    "declarativeNetRequest"
-  ],
-  "host_permissions": [
+    "webRequest",
+    "webRequestBlocking",
     "*://chatgpt.com/*",
     "*://chat.openai.com/*",
     "*://gemini.google.com/*",
@@ -20,14 +22,19 @@
     "*://chat.mistral.ai/*"
   ],
   "background": {
-    "service_worker": "background.js"
+    "scripts": ["compat.js", "providers.js", "background.js"]
   },
   "options_ui": {
     "page": "options/options.html",
-    "open_in_tab": true
+    "browser_style": true
   },
-  "side_panel": {
-    "default_path": "sidebar/sidebar.html"
+  "sidebar_action": {
+    "default_title": "AI Sidebar",
+    "default_panel": "sidebar/sidebar.html",
+    "default_icon": {
+      "48": "icons/icon-48.png",
+      "96": "icons/icon-96.png"
+    }
   },
   "content_scripts": [
     {
@@ -43,15 +50,6 @@
       "run_at": "document_idle"
     }
   ],
-  "declarative_net_request": {
-    "rule_resources": [
-      {
-        "id": "strip_headers",
-        "enabled": true,
-        "path": "chrome_rules.json"
-      }
-    ]
-  },
   "icons": {
     "16": "icons/icon-16.png",
     "32": "icons/icon-32.png",
@@ -88,6 +86,28 @@
         "mac": "MacCtrl+Shift+4"
       },
       "description": "Run Prompt 4"
+    },
+    "prompt-5": {
+      "suggested_key": {
+        "default": "Alt+Shift+5",
+        "mac": "MacCtrl+Shift+5"
+      },
+      "description": "Run Prompt 5"
+    },
+    "prompt-6": {
+      "description": "Run Prompt 6"
+    },
+    "prompt-7": {
+      "description": "Run Prompt 7"
+    },
+    "prompt-8": {
+      "description": "Run Prompt 8"
+    },
+    "prompt-9": {
+      "description": "Run Prompt 9"
+    },
+    "prompt-10": {
+      "description": "Run Prompt 10"
     }
   }
 }

@@ -2,4 +2,5 @@
 *-test.html
 !.gitignore
 *_files/
+_metadata/
 CLAUDE.MD
