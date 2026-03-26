@@ -7,6 +7,12 @@ console.log("Background script loading...");
 console.log("PROVIDERS available:", typeof PROVIDERS !== 'undefined');
 console.log("DEFAULT_PROVIDER:", typeof DEFAULT_PROVIDER !== 'undefined' ? DEFAULT_PROVIDER : 'NOT DEFINED');
 
+// Chrome: clicking the toolbar icon opens the side panel
+if (IS_CHROME) {
+  chrome.sidePanel.setPanelBehavior({ openPanelOnActionClick: true })
+    .catch(e => console.error("setPanelBehavior failed:", e));
+}
+
 // Default prompts
 const DEFAULT_PROMPTS = [
   { enabled: true, name: "Explain", text: "Explain: %s", contextWords: 0 },

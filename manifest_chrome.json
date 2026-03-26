@@ -26,6 +26,9 @@
     "page": "options/options.html",
     "open_in_tab": true
   },
+  "action": {
+    "default_title": "AI Sidebar"
+  },
   "side_panel": {
     "default_path": "sidebar/sidebar.html"
   },
