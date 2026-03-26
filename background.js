@@ -91,7 +91,7 @@ async function buildContextMenu() {
     // Create parent menu
     browser.contextMenus.create({
       id: "ai-assistant-parent",
-      title: "AI Assistant",
+      title: "AI Sidebar",
       contexts: ["selection"]
     }, () => void browser.runtime.lastError);
 
